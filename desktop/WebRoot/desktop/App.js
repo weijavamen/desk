@@ -23,7 +23,8 @@ Ext.define('MyDesktop.App', {
         'MyDesktop.BogusModule',
 
 //        'MyDesktop.Blockalanche',
-        'MyDesktop.Settings'
+        'MyDesktop.Settings',
+        'MyDesktop.UserGridWindow'
     ],
 
     init: function() {
@@ -44,7 +45,8 @@ Ext.define('MyDesktop.App', {
             new MyDesktop.AccordionWindow(),
             new MyDesktop.Notepad(),
             new MyDesktop.BogusMenuModule(),
-            new MyDesktop.BogusModule()
+            new MyDesktop.BogusModule(),
+            new MyDesktop.UserGridWindow()
         ];
     },
 
@@ -62,9 +64,11 @@ Ext.define('MyDesktop.App', {
                 model: 'Ext.ux.desktop.ShortcutModel',
                 data: [
                     { name: 'Grid Window', iconCls: 'grid-shortcut', module: 'grid-win' },
-                    { name: 'Accordion Window', iconCls: 'accordion-shortcut', module: 'acc-win' },
+                    { name: 'Accordion Window', iconCls: 'notepad-shortcut', module: 'acc-win' },
                     { name: 'Notepad', iconCls: 'notepad-shortcut', module: 'notepad' },
-                    { name: 'System Status', iconCls: 'cpu-shortcut', module: 'systemstatus'}
+                    { name: 'System Status', iconCls: 'cpu-shortcut', module: 'systemstatus'},
+                    { name: '用户管理', iconCls: 'grid-shortcut', module: 'grid-user'},
+                    { name: '订单管理', iconCls: 'grid-shortcut', module: 'tab-win'}
                 ]
             }),
 
@@ -78,7 +82,7 @@ Ext.define('MyDesktop.App', {
         var me = this, ret = me.callParent();
 
         return Ext.apply(ret, {
-            title: 'Don Griffin',
+            title: '开始菜单',
             iconCls: 'user',
             height: 300,
             toolConfig: {
