@@ -108,14 +108,14 @@ Ext.define('MyDesktop.App', {
 
     getTaskbarConfig: function () {
         var ret = this.callParent();
-
+        //底部小图标*快捷方式
         return Ext.apply(ret, {
             quickStart: [
                 { name: 'Accordion Window', iconCls: 'accordion', module: 'acc-win' },
                 { name: 'Grid Window', iconCls: 'icon-grid', module: 'grid-win' }
             ],
             trayItems: [
-                { xtype: 'trayclock', flex: 1 }
+                { xtype: 'trayclock', flex: 1 }                          //底部右侧时钟
             ]
         });
     },
