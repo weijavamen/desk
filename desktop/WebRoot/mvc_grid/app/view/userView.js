@@ -18,6 +18,15 @@ Ext.define("mvcGrid.view.userView",{
 		dataIndex : 'phone',
 		width : 100
 	}],
+	dockedItems : [{
+		xtype : 'toolbar',
+		dock : 'top',
+		items : [
+			{text : '新增',xtype : 'button',id : 'add'},
+			{text : '修改',xtype : 'button',id : 'update'},
+			{text : '删除',xtype : 'button',id : 'delete'}
+		]
+	}],
 	store : 'userStore',
 	 initComponent: function() {
 	 	this.callParent();
