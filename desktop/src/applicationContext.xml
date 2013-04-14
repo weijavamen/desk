@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:task="http://www.springframework.org/schema/task" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+        http://www.springframework.org/schema/task 
+        http://www.springframework.org/schema/task/spring-task-3.1.xsd "> 
+
+	<context:component-scan base-package="com.desktop.dao" />
+	<context:component-scan base-package="com.desktop.service" />
+	<context:property-placeholder location="classpath:config.properties" />
+	
+	<!-- 定义一个使用DBCP实现的数据源,硬编码配置 -->
+	<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" 
+		destroy-method="close"
+		p:driverClassName="com.mysql.jdbc.Driver"
+		p:url="jdbc:mysql://localhost:3306/test2"
+		p:username="root"
+		p:password="123" /> -->
+	
+	<!-- 定义一个使用DBCP实现的数据源,通过properties文件配置-->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" 
+		destroy-method="close"
+		p:driverClassName="${connection.driver_class}"
+		p:url="${connection.url}"
+		p:username="${connection.username}"
+		p:password="${connection.password}" />
+		
+	<!-- Spring风格 Hibernate 配置(基于注解Annotation)-->
+	<!-- class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean "
+		p:dataSource-ref="dataSource">
+			<!-- <property name="annotatedClasses">
+				<list>
+					<value>com.xinocc.model.User,....</value>
+				</list>
+			</property> -->
+			<property name="packagesToScan" value="com.desktop.model" />
+			<property name="hibernateProperties">
+				<props>
+					<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+					<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+					<prop key="javax.persistence.validation.mode">none</prop>
+					<!-- <prop key="hibernate.current_session_context_class">thread</prop> -->
+					<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				</props>
+			</property>
+		</bean>
+		
+	<!-- spring 事务配置 -->
+	  <bean id="transactionManager" 
+	 	class="org.springframework.orm.hibernate4.HibernateTransactionManager"
+	 	p:sessionFactory-ref="sessionFactory" />
+	 	
+	 <!-- <tx:annotation-driven /> -->
+	 
+	 <tx:advice id="txAdvice" transaction-manager="transactionManager">  
+        <tx:attributes>  
+            <tx:method name="exists" read-only="true" />   
+	        <tx:method name="save*" propagation="REQUIRED" />     
+	        <tx:method name="add*" propagation="REQUIRED" />     
+	        <tx:method name="create*" propagation="REQUIRED" />     
+	        <tx:method name="insert*" propagation="REQUIRED" />     
+	        <tx:method name="update*" propagation="REQUIRED" />     
+	        <tx:method name="merge*" propagation="REQUIRED" />     
+	        <tx:method name="del*" propagation="REQUIRED" />     
+	        <tx:method name="remove*" propagation="REQUIRED" />     
+	        <tx:method name="put*" propagation="REQUIRED" />     
+	        <tx:method name="use*" propagation="REQUIRED"/>      
+	        <!-- hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到    -->  
+	        <tx:method name="get*" propagation="REQUIRED" />     
+	        <tx:method name="count*" propagation="REQUIRED" read-only="true" />     
+	        <tx:method name="find*" propagation="REQUIRED" read-only="true" />     
+	        <tx:method name="list*" propagation="REQUIRED" read-only="true" />    
+	        <tx:method name="*" propagation="REQUIRED" />   
+              
+        </tx:attributes>  
+    </tx:advice>
+    
+    <aop:config proxy-target-class="true">
+		<aop:advisor
+			pointcut="execution(* com.desktop.service.*.*(..))"
+			advice-ref="txAdvice" />
+	</aop:config> 
+	
+	<!-- 配置异步调用 -->
+	<task:annotation-driven />
+	
+	
+	<!-- Jdbc模板Bean -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" 
+		p:dataSource-ref="dataSource" />
+
+</beans>
