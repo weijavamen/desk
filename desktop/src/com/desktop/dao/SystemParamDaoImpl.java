@@ -7,13 +7,13 @@ import org.springframework.stereotype.Repository;
 import com.desktop.model.SystemParam;
 
 @Repository
-public class SystemParamDaoImpl implements SystemParamDao {
+public class SystemParamDaoImpl extends BaseDaoImpl<SystemParam> implements SystemParamDao {
 
-	@Autowired
-	private SessionFactory sessionFactory;
-	
-	public void saveOne(SystemParam sp) {
-		sessionFactory.getCurrentSession().persist(sp);
-	}
+//	@Autowired
+//	private SessionFactory sessionFactory;
+//	
+//	public void saveOne(SystemParam sp) {
+//		sessionFactory.getCurrentSession().persist(sp);
+//	}
 
 }

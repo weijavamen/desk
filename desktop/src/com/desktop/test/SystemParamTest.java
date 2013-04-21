@@ -21,9 +21,21 @@ public class SystemParamTest {
 	@Autowired
 	private SystemParamService sps;
 	
+//	@Test
+//	public void testSaveOne(){
+//		boolean result = sps.saveOne();
+//		assertTrue(result);
+//	}
+	
 	@Test
-	public void testSaveOne(){
-		boolean result = sps.saveOne();
+	public void testFindOneById(){
+		long id = sps.findOneById();
+		assertTrue(id==4);
+	}
+	
+	@Test
+	public void testDeleteOneById(){
+		boolean result = sps.deleteOneById();
 		assertTrue(result);
 	}
 	
