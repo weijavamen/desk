@@ -15,8 +15,9 @@
         
         
         <context:component-scan base-package="com.desktop.controller" />
+        
         <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-        	p:prefix="/WEB-INF/views/"
+        	p:prefix="/WEB-INF/desktop/"
         	p:suffix=".jsp" />
         	
       	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" 
